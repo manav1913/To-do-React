@@ -6,18 +6,33 @@ const Todo = () => {
 
     const [todoList, setTodoList] = useState([])
     const [input, setInput] = useState("")
+    const [editIndex, setEditIndex] = useState(null)
 
     const addTodo = () => {
-        if(input === "") return
+        if (input.trim() === "") return
 
-        setTodoList([...todoList, input])
-        setInput ("")
-    }
+        if (editIndex !== null) {
+            const updated = todoList.map((todo, index) =>
+            index === editIndex ? input : todo
+            )
+            setTodoList(updated)
+            setEditIndex(null)
+        } else {
+            setTodoList([...todoList, input])
+  }
+
+  setInput("")
+}
 
     const deleteTodo = (indexToDelete) => {
         const updatedTodo = todoList.filter((todo, index) => index !== indexToDelete)
         setTodoList(updatedTodo)
     }
+
+    const editTodo = (indexToEdit) => {
+        setInput(todoList[indexToEdit])
+        setEditIndex(indexToEdit)
+}
 
 
   return (
@@ -31,7 +46,10 @@ const Todo = () => {
        />
       <button onClick={addTodo}>Add</button>
       {todoList.map((todo, index)=> <div key={index}>
-        <p>{todo} <button onClick={() => deleteTodo(index)}>Delete</button></p>
+        <p>{todo} 
+            <button onClick={() => deleteTodo(index)}>Delete</button>
+            <button onClick={()=> editTodo(index)}>📝</button>
+            </p>
       </div>)}
     </div>
 
